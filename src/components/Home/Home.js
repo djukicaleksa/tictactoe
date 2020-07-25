@@ -1,6 +1,7 @@
 import React from 'react';
 
-import {NewPlayer} from '../NewPlayer/NewPlayer'
+import {NewPlayer} from '../NewPlayer/NewPlayer';
+import {LogIn} from "./LogIn/LogIn";
 
 export class Home extends React.Component {
     
@@ -14,11 +15,14 @@ export class Home extends React.Component {
         console.log('component mounted');
     }
 
+    logIn = () => {
+            
+    }
 
     render(){
         return (
             <div>
-                {isLogged?console.log("login page goes here"):<NewPlayer></NewPlayer>}
+                {this.state.isLogged?<NewPlayer></NewPlayer>:<LogIn></LogIn>}
             </div>
         )
     }
