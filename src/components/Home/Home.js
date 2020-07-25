@@ -12,7 +12,9 @@ export class Home extends React.Component {
 
         this.state={
             isLogged:false,
-            apiKey:""
+            apiKey:"",
+            name:"",
+            playerId:""
         };
     }
 
@@ -25,10 +27,19 @@ export class Home extends React.Component {
         .then(returnedData => this.setState({apiKey:returnedData.apikey,isLogged:true}))
     }
 
+    addNewPlayer = () => {
+        if(this.state.apiKey) {
+            let newPlayerName = document.getElementById("playerName").value;
+            apiRequests.newPlayer(newPlayerName,this.state.apiKey)
+            .then(playerData=>this.setState({name:playerData.name,playerId:playerData.id}))
+            .catch(error =>console.log(error))
+        }
+    }
+
     render(){
         return (
             <div>
-                {this.state.isLogged?<NewPlayer></NewPlayer>:<LogIn logIn={this.logIn}></LogIn>}
+                {this.state.isLogged?<NewPlayer addNewPlayer={this.addNewPlayer}></NewPlayer>:<LogIn logIn={this.logIn}></LogIn>}
             </div>
         )
     }
