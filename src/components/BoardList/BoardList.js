@@ -1,16 +1,22 @@
 import React from "react";
 import { SingleBoard } from "./SingleBoard/SingleBoard";
 
+import styles from "./BoardList.module.css"
+
+
 export const BoardList = (props) => {
     return (
-        <div>
-            {(props.boardList==[]) ? <p>No Boards</p> :
-            (<ul>
+        <div className={styles.border}>
+        <div className={styles.board}>
+            <h1 className={styles.title}>List of boards</h1>
+            {(props.boardList===[]) ? <p>No Boards</p> :
+            (<ul className={styles.boardList}>
                 {props.boardList.map((board,i)=>{
-                    return <SingleBoard id={board.id} key={i} players={board.players}></SingleBoard>
+                   return <li key={i}><SingleBoard id={board.id}  players={board.players}></SingleBoard></li>
                 })}
             </ul>)}
-            <button onClick={()=>props.createBoard()}>Create Board</button>
         </div>
+            <button onClick={()=>props.createBoard()} className={styles.createBtn}>Create Board</button>
+            </div>
     )
 }
