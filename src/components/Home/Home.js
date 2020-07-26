@@ -6,6 +6,7 @@ import {LogIn} from "./LogIn/LogIn";
 
 import { apiRequests } from '../../services/APIRequests';
 import { BoardList } from '../BoardList/BoardList';
+import { GameField } from '../GameField/GameField';
 
 export class Home extends React.Component {
     
@@ -17,11 +18,13 @@ export class Home extends React.Component {
             apiKey:"",
             name:"",
             playerId:"",
-            boardList: []
+            boardList: [],
+            isInGame:true,
         };
     }
 
     componentDidMount(){
+        
         console.log('component mounted');
     }
 
@@ -57,9 +60,9 @@ export class Home extends React.Component {
     render(){
         return (
             <div>
+                {this.state.isInGame?<GameField></GameField> :((!this.state.name) ?(this.state.isLogged?<NewPlayer addNewPlayer={this.addNewPlayer}></NewPlayer>:<LogIn logIn={this.logIn}></LogIn>) :
+                 <BoardList boardList={this.state.boardList} createBoard={this.createBoard}></BoardList>) }
                 
-                {(!this.state.name) ?(this.state.isLogged?<NewPlayer addNewPlayer={this.addNewPlayer}></NewPlayer>:<LogIn logIn={this.logIn}></LogIn>) :
-                 <BoardList boardList={this.state.boardList} createBoard={this.createBoard}></BoardList> }
             </div>
         )
     }
