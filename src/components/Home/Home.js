@@ -3,9 +3,11 @@ import React from 'react';
 import {NewPlayer} from '../NewPlayer/NewPlayer';
 import {LogIn} from "./LogIn/LogIn";
 
+import socketIOClient from "socket.io-client"
 
 import { apiRequests } from '../../services/APIRequests';
 import { BoardList } from '../BoardList/BoardList';
+import { GameField } from '../GameField/GameField';
 
 export class Home extends React.Component {
     
@@ -13,21 +15,51 @@ export class Home extends React.Component {
         super(props);
 
         this.state={
+            endpoint:'http://178.128.206.150:7000/?id=',
             isLogged:false,
             apiKey:"",
             name:"",
             playerId:"",
-            boardList: []
+            boardList: [],
+            isInGame:false,
+            socket:null,
+            boardId:null,
+            boardMatrix : {1:null,2:null,3:null,4:null,5:null,6:null,7:null,8:null,9:null}
         };
     }
 
-    componentDidMount(){
-        console.log('component mounted');
-    }
+ 
+        componentDidMount() {
+            
+            console.log("mounted");
+            if(this.state.playerId){
+
+                const { endpoint } = this.state;
+                // Made a connection with server
+                console.log(endpoint);
+                console.log(this.props.boardId);
+                const socket = (endpoint+this.state.playerId);
+    
+                socket.on('joined',(data) =>console.log(data) );
+               
+              }
+          
+
 
     logIn = () => {
         apiRequests.registerUser()
-        .then(returnedData => this.setState({apiKey:returnedData.apikey,isLogged:true}))
+        .then(returnedData => this.setState({apiKey:returnedData.apikey,isLogged:true}));
+        
+            const { endpoint } = this.state;
+            // Made a connection with server
+            const socket = socketIOClient(endpoint+this.state.playerId,{transports: ['websocket']});
+            socket.on("connect", () => {
+                
+              this.setState({ socket: socket })
+              console.log(this.state.socket);
+            })
+            console.log(this.state.socket);
+            console.log(socket);
         // .then(data => console.log(data))
     }
 
@@ -52,14 +84,22 @@ export class Home extends React.Component {
         .then(boardsInfo => this.setState({boardList:boardsInfo}))
 
     }
-
+    joinBoard = (boardId) => {
+        this.setState({isInGame:true,boardId})
+        
+    }
+    opponentLeft = (data) => {
+        // If opponent left then get back from game play to player screen
+        alert("Opponent Left");
+        this.setState({ isGameStarted: false, gameId: null, gameData: null });
+        
+    }
 
     render(){
         return (
             <div>
-                
-                {(!this.state.name) ?(this.state.isLogged?<NewPlayer addNewPlayer={this.addNewPlayer}></NewPlayer>:<LogIn logIn={this.logIn}></LogIn>) :
-                 <BoardList boardList={this.state.boardList} createBoard={this.createBoard}></BoardList> }
+                {this.state.isInGame?<GameField boardId={this.state.boardId} opponentLeft={this.opponentLeft}></GameField> :((!this.state.name) ?(this.state.isLogged?<NewPlayer addNewPlayer={this.addNewPlayer}></NewPlayer>:<LogIn logIn={this.logIn}></LogIn>) :
+                 <BoardList boardList={this.state.boardList} createBoard={this.createBoard} joinBoard={this.joinBoard}></BoardList>) }               
             </div>
         )
     }

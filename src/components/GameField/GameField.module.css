@@ -1,0 +1,21 @@
+.square {
+    
+    width: 100px;
+    height: 100px;
+    border:white solid 5px;
+    background-color: whitesmoke;
+}
+
+.square:hover{
+    background-color: thistle;
+}
+
+.gameContainer{
+    text-align: center;
+    margin:0 auto;
+    padding-top: 20vh;
+}
+.table{
+    margin: 0 auto;
+    border-spacing: 2vh;
+}
