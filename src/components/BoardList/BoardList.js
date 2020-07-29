@@ -12,7 +12,7 @@ export const BoardList = (props) => {
             {(props.boardList===[]) ? <p>No Boards</p> :
             (<ul className={styles.boardList}>
                 {props.boardList.map((board,i)=>{
-                   return <li key={i}><SingleBoard id={board.id}  players={board.players}></SingleBoard></li>
+                   return <li key={i}><SingleBoard id={board.id}  players={board.players} joinBoard={props.joinBoard}></SingleBoard></li>
                 })}
             </ul>)}
         </div>
