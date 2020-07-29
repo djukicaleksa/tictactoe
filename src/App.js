@@ -5,11 +5,12 @@ import { Home } from './components/Home/Home';
 import './App.css';
 
 
+
 function App() {
-  return (
-    <div className="App">
-      <Home></Home>
-    </div>
+  return (   
+      <div className="App">
+        <Home></Home>
+      </div>
   );
 }
 
